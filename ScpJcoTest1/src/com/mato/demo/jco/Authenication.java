@@ -32,7 +32,7 @@ public class Authenication {
 
 			logger.debug("User is logged in.");
 
-			//authenticate the User
+			//logout
 			LoginContext loginContext = LoginContextFactory.createLoginContext("FORM");
 			loginContext.logout();
 		}

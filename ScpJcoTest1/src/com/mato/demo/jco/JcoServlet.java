@@ -51,6 +51,7 @@ public class JcoServlet extends HttpServlet {
 			requtext = "Requested with no parameter.";
 		}
 
+		// execute RFC and forward jsp
 		try {
 			JCoDestination d = getDestiation();
 			JCoFunction f = d.getRepository().getFunction("STFC_CONNECTION");
@@ -77,8 +78,9 @@ public class JcoServlet extends HttpServlet {
 		String path = this.getServletContext().getRealPath("/WEB-INF/" + JCO_PROPERTIES);
 
 		InputStream is = new FileInputStream(path);
-
 		Properties p = new Properties();
+
+		// load jco destination name
 		p.load(is);
 		is.close();
 
