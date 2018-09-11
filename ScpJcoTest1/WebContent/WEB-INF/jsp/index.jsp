@@ -1,4 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
+<%@page import="com.mato.demo.jco.JcoServlet"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,7 +31,7 @@ table {
 		<table>
 			<tr>
 				<td>Input Text</td>
-				<td><input type="text" name="requtext"
+				<td><input type="text" name=<%=JcoServlet.PRAM_REQUTEXT%>
 					style="width: 100%; box-sizing: border-box"></td>
 			</tr>
 			<tr>

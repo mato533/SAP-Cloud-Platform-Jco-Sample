@@ -25,6 +25,9 @@ public class JcoServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
+	public static final String PRAM_REQUTEXT = "REQUTEXT";
+	public static final String PRAM_ECHOTEXT = "ECHOTEXT";
+	public static final String PRAM_RESPTEXT = "RESPTEXT";
 	public static final String JCO_DESTINATION = "jco.destination";
 	private static final String JCO_PROPERTIES = "jco.properties";
 
@@ -43,7 +46,7 @@ public class JcoServlet extends HttpServlet {
 			return;
 		}
 
-		String requtext = request.getParameter("requtext");
+		String requtext = request.getParameter(PRAM_REQUTEXT);
 		if (requtext == null) {
 			requtext = "Requested with no parameter.";
 		}
@@ -52,14 +55,14 @@ public class JcoServlet extends HttpServlet {
 			JCoDestination d = getDestiation();
 			JCoFunction f = d.getRepository().getFunction("STFC_CONNECTION");
 
-			f.getImportParameterList().setValue("REQUTEXT", requtext);
+			f.getImportParameterList().setValue(PRAM_REQUTEXT, requtext);
 
 			f.execute(d);
 
 			JCoParameterList exports = f.getExportParameterList();
 
-			request.setAttribute("ECHOTEXT", "" + exports.getString("ECHOTEXT"));
-			request.setAttribute("RESPTEXT", "" + exports.getString("RESPTEXT"));
+			request.setAttribute(PRAM_ECHOTEXT, "" + exports.getString(PRAM_ECHOTEXT));
+			request.setAttribute(PRAM_RESPTEXT, "" + exports.getString(PRAM_RESPTEXT));
 
 			request.getRequestDispatcher("/WEB-INF/jsp/result.jsp").forward(request, response);
 

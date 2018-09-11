@@ -1,3 +1,4 @@
+<%@page import="com.mato.demo.jco.JcoServlet"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -29,11 +30,11 @@ table {
 	<table>
 		<tr>
 			<td>ECHOTEXT</td>
-			<td><%=request.getAttribute("ECHOTEXT")%></td>
+			<td><%=request.getAttribute(JcoServlet.PRAM_ECHOTEXT )%></td>
 		</tr>
 		<tr>
 			<td>RESPTEXT</td>
-			<td><%=request.getAttribute("RESPTEXT")%></td>
+			<td><%=request.getAttribute(JcoServlet.PRAM_RESPTEXT)%></td>
 		</tr>
 		<tr>
 			<td align="center" colspan="2" style="border-style: none"><input
