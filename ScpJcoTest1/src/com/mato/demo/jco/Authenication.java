@@ -2,6 +2,7 @@ package com.mato.demo.jco;
 
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,15 @@ public class Authenication {
 			//authenticate the User
 			LoginContext loginContext = LoginContextFactory.createLoginContext("FORM");
 			loginContext.logout();
+		}
+
+	}
+
+	protected static boolean isLoggedin(HttpServletRequest request) {
+		if (request.getRemoteUser() == null) {
+			return false;
+		} else {
+			return true;
 		}
 
 	}

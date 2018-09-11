@@ -8,32 +8,25 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import javax.security.auth.login.LoginException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.sap.conn.jco.JCoDestination;
 import com.sap.conn.jco.JCoDestinationManager;
 import com.sap.conn.jco.JCoException;
 import com.sap.conn.jco.JCoFunction;
 import com.sap.conn.jco.JCoParameterList;
-import com.sap.conn.jco.JCoRepository;
 
 @WebServlet("/execute")
 public class JcoServlet extends HttpServlet {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
 	public static final String JCO_DESTINATION = "jco.destination";
 	private static final String JCO_PROPERTIES = "jco.properties";
-
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -45,49 +38,37 @@ public class JcoServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		if (!isLoggedin(request)) {
+			response.sendRedirect(request.getContextPath());
+			return;
+		}
+
+		String requtext = request.getParameter("requtext");
+		if (requtext == null) {
+			requtext = "Requested with no parameter.";
+		}
 
 		try {
+			JCoDestination d = getDestiation();
+			JCoFunction f = d.getRepository().getFunction("STFC_CONNECTION");
 
-			login(request.getRemoteUser());
-			logger.debug("Remote user : " + request.getRemoteUser());
+			f.getImportParameterList().setValue("REQUTEXT", requtext);
 
-			JCoDestination destination = getDestiation();
+			f.execute(d);
 
-			JCoRepository repo = destination.getRepository();
+			JCoParameterList exports = f.getExportParameterList();
 
-			JCoFunction stfcConnection = repo.getFunction("STFC_CONNECTION");
+			request.setAttribute("ECHOTEXT", "" + exports.getString("ECHOTEXT"));
+			request.setAttribute("RESPTEXT", "" + exports.getString("RESPTEXT"));
 
-			String strReqText = request.getParameter("requtext");
-			stfcConnection.getImportParameterList().setValue("REQUTEXT", "" + strReqText);
-			logger.debug("Post Parameter(requtext) : " + strReqText);
+			request.getRequestDispatcher("/WEB-INF/jsp/result.jsp").forward(request, response);
 
-			logger.debug("Execugte Remote function call : STFC_CONNECTION");
-			stfcConnection.execute(destination);
-
-			JCoParameterList exports = stfcConnection.getExportParameterList();
-
-			String echotext = exports.getString("ECHOTEXT");
-			String resptext = exports.getString("RESPTEXT");
-
-			request.setAttribute("ECHOTEXT", ("" + echotext));
-			request.setAttribute("RESPTEXT", ("" + resptext));
-
-			logger.debug("Return Values :");
-			logger.debug("ECHOTEXT : " + echotext);
-			logger.debug("RESPTEXT : " + resptext);
-
-			if (!response.isCommitted()) {
-				request.getRequestDispatcher("/WEB-INF/jsp/result.jsp").forward(request, response);
-			}
-
-		} catch (JCoException | LoginException e) {
+		} catch (JCoException e) {
 			e.printStackTrace(response.getWriter());
 
 		}
 
 	}
-
-
 
 	private JCoDestination getDestiation() throws FileNotFoundException, IOException, JCoException {
 		String path = this.getServletContext().getRealPath("/WEB-INF/" + JCO_PROPERTIES);
