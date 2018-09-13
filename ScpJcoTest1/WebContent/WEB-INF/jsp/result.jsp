@@ -1,5 +1,5 @@
-<%@page import="com.mato.demo.jco.JcoServlet"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@page import="com.mato.demo.jco.StfcConnection"%>
+<%@page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -30,11 +30,11 @@ table {
 	<table>
 		<tr>
 			<td>ECHOTEXT</td>
-			<td><%=request.getAttribute(JcoServlet.PRAM_ECHOTEXT )%></td>
+			<td><%=request.getAttribute(StfcConnection.PRAM_ECHOTEXT)%></td>
 		</tr>
 		<tr>
 			<td>RESPTEXT</td>
-			<td><%=request.getAttribute(JcoServlet.PRAM_RESPTEXT)%></td>
+			<td><%=request.getAttribute(StfcConnection.PRAM_RESPTEXT)%></td>
 		</tr>
 		<tr>
 			<td align="center" colspan="2" style="border-style: none"><input
