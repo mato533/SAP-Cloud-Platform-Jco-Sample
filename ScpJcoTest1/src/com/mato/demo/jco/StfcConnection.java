@@ -27,13 +27,10 @@ public class StfcConnection {
 	private String echoText;
 	private String respText;
 
-
 	public StfcConnection(String propDirPath, String requText) {
 		this.propFilePath = Paths.get(propDirPath, JCO_PROPERTIES).toString();
 
-		if (requText != null) {
-			this.requText = requText;
-		}
+		this.requText = requText;
 	}
 
 	public void execute() throws JCoException, FileNotFoundException, IOException {
@@ -49,7 +46,6 @@ public class StfcConnection {
 		echoText = exports.getString(PRAM_ECHOTEXT);
 		respText = exports.getString(PRAM_RESPTEXT);
 	}
-
 
 	private JCoDestination getDestiation() throws FileNotFoundException, IOException, JCoException {
 
@@ -70,5 +66,4 @@ public class StfcConnection {
 	public String getRespText() {
 		return respText;
 	}
-
 }
